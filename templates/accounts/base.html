@@ -1,0 +1,119 @@
+  
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'accounts/fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'accounts/css/owl.carousel.min.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.min.css' %}">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
+    <title>
+      {% block title %}
+      {% endblock title %}
+    </title>
+    {% block additional_headers %}
+    {% endblock additional_headers %}
+  </head>
+  <body>
+  
+    
+    <aside class="sidebar">
+      <div class="toggle">
+        <a href="#" class="burger js-menu-toggle" data-toggle="collapse" data-target="#main-navbar">
+              <span></span>
+            </a>
+      </div>
+      <div class="side-inner">
+
+        <div style="background-color:white" class="profile">
+          <img  src="{{request.user.profile_image.url}}" alt="Image" class="img-fluid">
+          <h3 class="name">
+            <a style="color:black" href={% url 'accounts:profile' %}>
+              {{ request.user.user_name|upper }}
+            </a>
+          </h3>
+          {% comment %} <span class="country">Web Designer</span> {% endcomment %}
+        </div>
+
+        
+        <div class="nav-menu">
+          <ul>
+            {% comment %} <li class="accordion">
+              <a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsible">
+                <span class="icon-home mr-3"></span>Feed
+              </a>
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                <div>
+                  <ul>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Sport</a></li>
+                    <li><a href="#">Health</a></li>
+                  </ul>
+                </div>
+              </div>
+            </li> {% endcomment %}
+            <li><a href="{% url 'accounts:home' %}"><span class="icon-notifications mr-3"></span>Home Page</a></li>
+
+            <li><a href="{% url 'accounts:profile' %}"><svg class='mr-3' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>My Profile</a></li>
+
+            <li class="accordion">
+              <a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="collapsible">
+                 <svg class='mr-3' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-fill" viewBox="0 0 16 16">
+                  <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
+                </svg>Orders
+              </a>
+
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingOne">
+                <div>
+                  <ul>
+                    <li><a href="#">As Buyer</a></li>
+                    <li><a href="#">As Seller</a></li>
+                  </ul>
+                </div>
+              </div>
+
+            </li>
+           
+             {% comment %} <li><a href="#"><span class="icon-location-arrow mr-3"></span>Direct</a></li>
+            <li><a href="#"><span class="icon-pie-chart mr-3"></span>Stats</a></li> {% endcomment %}
+                {% comment %} <a href="#"><span class="icon-sign-out mr-3"></span>Sign out</a> {% endcomment %}
+                   
+                    <form action={% url 'logout' %}>
+                        <li>
+                            <a style="cursor:pointer" onclick="this.parentNode.parentNode.submit()"> <span class="icon-sign-out mr-3"></span> Sign out</a>
+                        </li>
+                    </form> 
+                    
+          </ul>
+        </div>
+      </div>
+      
+    </aside>
+    {% block content %}
+    {% endblock %}
+    <script src="{% static 'accounts/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'accounts/vendor/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'accounts/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'accounts/vendor/bootstrap/js/main.js' %}"></script>
+  </body>
+</html>
+

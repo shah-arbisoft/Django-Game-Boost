@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Sign Up</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="{% static 'accounts/images/icons/favicon.ico' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main.css' %}">
+<!--===============================================================================================-->
+</head>
+<body>
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('{% static "accounts/images/2.jpg" %} ');">
+			<div class="wrap-login100 p-t-30 p-b-50">
+				<span class="login100-form-title p-b-41 ">
+					Create your account
+
+				</span>
+				<form class="login100-form validate-form p-b-33 p-t-5" method="post" action="">
+                     {% csrf_token %}
+
+                     {% for field in form %}
+                        <div class="wrap-input100 validate-input">
+                            {{field}}
+                           <span class="focus-input100"></span>
+                        </div>
+                    {% endfor %} 
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{form.errors}}
+                        </div>
+                    {% endif %}
+                    
+					<div class="container-login100-form-btn m-t-32">
+						<button class="login100-form-btn">
+							Create Account
+						</button>
+					</div>
+				</form>
+			</div>          
+		</div>
+	</div>
+	
+</body>
+</html>
