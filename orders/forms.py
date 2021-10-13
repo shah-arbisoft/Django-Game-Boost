@@ -1,5 +1,7 @@
 from django.forms import ModelForm, fields
+
 from .models import Order
+
 
 class PlacingOrder(ModelForm):
     class Meta:

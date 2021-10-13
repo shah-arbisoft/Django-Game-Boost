@@ -1,0 +1,22 @@
+{% extends 'all_games.html' %}
+
+
+{% block description %}
+    {{game.game.description}}
+{% endblock description %}
+
+
+{% block price %}
+<h6 class="font-weight-bold my-2">
+    Price: ${{game.seller_price}}
+</h6>
+{% endblock price %}
+
+{% block form %}
+    <form action={% url "orders:creating_order"  %} method="post">
+        {% csrf_token %}
+        <input  type="hidden" name="game" value="{{game.name}}"></input>
+        <input  type="hidden" name="seller" value="{{seller}}"></input>
+        <input type="submit" class="btn btn-primary" value="Start Order">
+    </form>
+{% endblock form %}

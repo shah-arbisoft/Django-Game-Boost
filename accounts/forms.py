@@ -1,15 +1,21 @@
-# class CreateUser(Us)
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.forms import widgets
+from django.http import request
+from django.utils.translation import ugettext as _
+
 # from django.forms import fields
 from accounts.models import User
-from django.utils.translation import ugettext as _
 
 
 class ProfileUpdateForm(forms.Form):
+
+    # def __init__(self, *args, **kwargs):
+    #     self.request = kwargs.pop('request' , None)
+    #     super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+
     full_name = forms.CharField(label="Full Name", max_length=50, required=False)
     user_name = forms.CharField(label='User name', max_length=50, required=False, disabled=True)
     email = forms.EmailField(label='Email', max_length=100, required=False, disabled=True)
@@ -24,8 +30,7 @@ class ProfileUpdateForm(forms.Form):
     new_password = forms.CharField(label='New Password', widget=forms.PasswordInput(), required=False, min_length=8)
     confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(), required=False, min_length=8)
 
-    def save(self, *args, **kwargs):
-        pass
+    
     def clean_confirm_password(self):
         cleaned_data = self.cleaned_data
         new_password = cleaned_data.get("new_password")
@@ -36,8 +41,31 @@ class ProfileUpdateForm(forms.Form):
                 raise ValidationError(_("Passwords did not match"))
         return cleaned_data
 
-
-
+    
+    
+    # def save(self, commit=True):
+    #     print(commit.get("request").user)
+    #     print(self.request)
+    #     cleaned_data = super().clean()
+    #     request = self.request
+    #     user = request.user
+    #     if cleaned_data.get('full_name'):
+    #         user.full_name = cleaned_data.get('full_name')
+    #     if cleaned_data.get('cnic'):
+    #         user.cnic = cleaned_data.get('cnic')
+    #     if cleaned_data.get('credit_card'):
+    #         user.credit_card_number = cleaned_data.get('credit_card')
+    #     # if cleaned_data.get('date_of_birth') != "":
+    #     #     print(cleaned_data.get('date_of_birth'))
+    #     #     user.date_of_birth = cleaned_data.get('date_of_birth')
+    #     if cleaned_data.get('age'):
+    #         user.age = cleaned_data.get('age')
+    #     if cleaned_data.get('about_info'):
+    #         user.about_info = cleaned_data.get('about_info')
+    #     if request.POST.get('profile_image'):
+    #         user.profile_image = request.FILES['profile_image']
+    #     return user
+        
 
 class SignupForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
