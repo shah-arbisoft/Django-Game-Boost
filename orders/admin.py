@@ -1,6 +1,9 @@
+"""Models to be displayed on Admin panel are registered here"""
+
 from django.contrib import admin
 
-from .models import Order
+# pylint: disable=relative-beyond-top-level
+from .models import Order, Review
 
-# Register your models here.
 admin.site.register(Order)
+admin.site.register(Review)

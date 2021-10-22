@@ -21,7 +21,7 @@
             <div class="media-body order-2 order-lg-1">
             <a href = {% url "accounts:display_profile" seller %}>
             <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
-                {{seller|title}}
+                {{seller.user.user_name|title}}
             </h5>
             </a>
             <p class="font-italic text-muted mb-0 small">
@@ -40,23 +40,35 @@
                     {% endfor %}
                 </ul>
             </div>
-            </div><img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
-        </div>
-        <!-- End -->
-        <div class="d-flex align-items-center justify-content-between mt-1">
-    
-            <form action={% url "orders:creating_order" %} method="post">
-                {% csrf_token %}
-                <input  type="hidden" name="seller" value="{{seller}}"></input>
-                <input type="submit" class="btn btn-primary" value="Place Order">
-            </form>
-        
-        </div>
+            </div>
+                <img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+            </div>
+            <div class="d-flex align-items-center justify-content-between mt-1">
+                {% block form_field %}
+                    <input type="submit" class="submit_form btn btn-primary" value="Place Order">
+                {% endblock form_field %}
+            </div>
         </li>
-        <!-- End -->
     {% endfor %}
+
 {% endblock product_loop %}
 
       
+{% block form %}
+    <form id="form" action={% url "orders:creating_order" %} method="post">
+      {% csrf_token %}
+      <input  type="hidden" name="seller" value="{{seller}}"></input>
+      <input  type="hidden" name="game" value="{{game_sellers.first}}"></input>
+    </form>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".submit_form").click(function() {
+                var seller_name = $(this.parentNode.parentNode).find("h5").text();
+                $("#form").find("input").eq(1).val(seller_name.trim());
+                $("#form").submit()
+            });
+    });
+    </script>
+  {% endblock form %}
 

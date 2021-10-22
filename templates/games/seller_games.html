@@ -1,6 +1,14 @@
 {% extends 'all_games.html' %}
 
 
+{% block list_type %}
+    <strong style="color:black">
+        {{seller.user.user_name|title}}
+    </strong> 
+    Games
+{% endblock list_type %}
+
+
 {% block description %}
     {{game.game.description}}
 {% endblock description %}
@@ -12,11 +20,38 @@
 </h6>
 {% endblock price %}
 
+
+{% block clicks %}
+    <br>
+        clicks: {{game.game.clicks}}
+    <br>
+{% endblock clicks %}
+
+
+{% block form_field %}
+        <input type="submit" class="submit_form btn btn-primary" value="Start Order">
+{% endblock form_field %}
+
+{% block image %}
+    <img src={{game.game.image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+{% endblock image %}
+
+
 {% block form %}
-    <form action={% url "orders:creating_order"  %} method="post">
+    <form id="form" action={% url "orders:creating_order"  %} method="post">
         {% csrf_token %}
         <input  type="hidden" name="game" value="{{game.name}}"></input>
-        <input  type="hidden" name="seller" value="{{seller}}"></input>
-        <input type="submit" class="btn btn-primary" value="Start Order">
+        <input  type="hidden" name="seller" value="{{seller.user.user_name}}"></input>
     </form>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".submit_form").click(function() {
+                var name = $(this.parentNode.parentNode).find("h5").text();
+                $("#form").find("input").eq(1).val(name.trim());
+                $("#form").submit()
+
+            });
+        });
+    </script>
 {% endblock form %}

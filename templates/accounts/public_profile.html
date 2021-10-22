@@ -2,5 +2,12 @@ User : {{user}}
 <br>
 Clicks : {{user.seller.clicks}}
 <br>
-
 Total Orders: {{total_orders}}
+
+<br>
+Recent Buyers :
+<br>
+{% for buyer in recent_buyers %}
+    &nbsp;&nbsp;&nbsp;{{buyer}}
+    <br>
+{% endfor %}

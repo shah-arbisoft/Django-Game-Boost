@@ -19,21 +19,6 @@
 
 {% block sidebar %}{% endblock sidebar %}
 {% block content %}
-  <!-- Responsive navbar-->
-        {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container px-lg-5">
-                <a class="navbar-brand" href="#!">Start Bootstrap</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav> {% endcomment %}
-        <!-- Header-->
         <header class="py-5">
             <div class="container px-lg-5">
                 <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
@@ -41,16 +26,28 @@
                         <h1 class="display-5 fw-bold">Welcome to <strong>GameBoost</strong>!</h1>
                         <br>
 
-                        <p class="fs-4">Bootstrap utility classes are used to create this jumbotron since the old component has been removed from the framework. Why create custom CSS when you can use utilities?</p>
+                        <p class="fs-4">
+                            The world of gamers is divided into two kind of gamers. The one who are skilful in their games and the one who don’t.
+                            The one who have skills wishes to make some money from their skills and the other, who are willing to pay to promote 
+                            his rank by hiring a coach or someone to play on behalf of them by using their account.
+                             <br>
+                            <h6>
+                                <strong>
+                                    We are here at your service to solve all these problems.
+                                </strong>
+                            </h6>
+                        </p>
                         <br>
                         <br>
                         <a class="btn btn-primary btn-lg" href= {% url "accounts:show_all"%}>Buy Services</a>
-                        <a class="btn btn-primary btn-lg" href={% url "games:seller_games" %}>Sell Services</a>
+                        <a class="btn btn-primary btn-lg" href={% url "games:my_games" %}>Sell Services</a>
 
                     </div>
                 </div>
             </div>
         </header>
+
+        {% comment %} Blow commented code is left adding new features in Future {% endcomment %}
         <!-- Page Content-->
         {% comment %} <section class="pt-4">
             <div class="container px-lg-5">
@@ -114,6 +111,3 @@
             </div>
         </section> {% endcomment %}
 {% endblock content %}
-
-
-

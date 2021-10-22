@@ -7,6 +7,7 @@
 
 {% block additional_headers %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
 
     <style>
         body {
@@ -26,112 +27,111 @@
 {% endblock additional_headers %}
 
 {% block content %}
-
-<div class="container py-5 ">
-  <!-- For demo purpose -->
-  <div class="row text-center text-white mb-5">
-    <div class="col-lg-7 mx-auto">
-      <h1 class="display-4">
-        {% block list_type %}
-            All Sellers
-        {% endblock list_type %}
-      </h1>
-    </div>
-  </div>
-  <!-- End -->
-
-
-  <div class="row">
-  
-    <div class="col-lg-8 mx-auto">
-      <!-- List group-->
-      {% block search_bar %}
-      
-        <section   class="search-sec">
-            <div class="container">
-                <form action= {% url "accounts:show_all" %} method="get" novalidate="novalidate">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-5 col-md-3 col-sm-12 p-0">
-                                    <input type="text" name="search_text" class="form-control search-slt" placeholder="Search here">
-                                </div>
-                                <div class="col-lg-4 col-md-3 col-sm-12 p-0">
-                                    <select class="form-control search-slt" name="choice">
-                                        <option>Games</option>
-                                        <option>Sellers</option>
-                                        
-                                    </select>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                    <button type="submit" class="btn btn-danger wrn-btn">Search</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+    <div class="container py-5 ">
+        <div class="row text-center text-white mb-5">
+            <div class="col-lg-7 mx-auto">
+                <h1 class="display-4">
+                    {% block list_type %}
+                        All Sellers
+                    {% endblock list_type %}
+                </h1>
             </div>
-        </section>
-        {% endblock search_bar %}
-      
-      
-      <ul class="list-group shadow">
-
-        {% block product_loop %}
-            {% for seller in sellers%}
-                <!-- list group item -->
-                <li class="list-group-item">
-                <!-- Custom content-->
-                <div class="media align-items-lg-center flex-column flex-lg-row p-3">
-                    <div class="media-body order-2 order-lg-1">
-                    <a href = {% url "accounts:display_profile" seller %}>
-                    <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
-                        {{seller|title}}
-                    </h5>
-                    </a>
-                    <p class="font-italic text-muted mb-0 small">
-                        {{seller.user.about_info}}
-                    </p>
-                    <div class="d-flex align-items-center justify-content-between mt-1">
-                        <h6 class="font-weight-bold my-2">
-                        {% comment %} {% if game %}
-                            {{game}}
-                            Price : {{game.seller_price}}
-                         {% else %} {% endcomment %}
-                            Starting Price: {{seller.starting_price}}
-                        {% comment %} {% endif %} {% endcomment %}
-                        </h6>
-                        
-                        
-                        <ul class="list-inline small">
-                            Rating : 
-                            {% for i in '12345'|make_list %}
-                                <li class="list-inline-item m-0"> <i class="fa fa-star {% if seller.rating >= forloop.counter %} checked  {% endif %}"></i></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    </div><img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
-                </div>
-                <!-- End -->
-                <div class="d-flex align-items-center justify-content-between mt-1">
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                {% block search_bar %}
+                    <section   class="search-sec">
+                        <div class="container">
+                            <form action= {% url "accounts:show_all" %} method="get" novalidate="novalidate">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-5 col-md-3 col-sm-12 p-0">
+                                                <input type="text" name="search_text" class="form-control search-slt" placeholder="Search here">
+                                            </div>
+                                            <div class="col-lg-4 col-md-3 col-sm-12 p-0">
+                                                <select class="form-control search-slt" name="choice">
+                                                    <option>Games</option>
+                                                    <option>Sellers</option> 
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                                <button type="submit" class="btn btn-danger wrn-btn">Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                {% endblock search_bar %}
             
-                    <form action={% url "accounts:show_games_for_current_seller" %} method="post">
-                        {% csrf_token %}
-                        <input  type="hidden" name="seller" value="{{seller}}"></input>
-                        <input type="submit" class="btn btn-primary" value="Place Order">
-                    </form>
-              
-                </div>
-                </li>
-                <!-- End -->
-            {% endfor %}
-        {% endblock product_loop %}
+                <ul class="list-group shadow">
 
-      </ul>
-      <!-- End -->
+                    {% block product_loop %}
+                        {% for seller in sellers%}
+                            <li class="list-group-item">
+                                <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                                    <div class="media-body order-2 order-lg-1">
+                                        <a href = {% url "accounts:display_profile" seller %}>
+                                            <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
+                                                {{seller.user.user_name|title}}
+                                            </h5>
+                                        </a>
+                                        <p class="font-italic text-muted mb-0 small">
+                                            {{seller.user.about_info}}
+                                        </p>
+                                        <div class="d-flex align-items-center justify-content-between mt-1">
+                                            <h6 class="font-weight-bold my-2">
+                                                Starting Price: {{seller.starting_price}}
+                                            </h6>
+                                            
+                                            <ul class="list-inline small">
+                                                Rating : 
+                                                {% for i in '12345'|make_list %}
+                                                    <li class="list-inline-item m-0">
+                                                        <i class="fa fa-star {% if seller.rating >= forloop.counter %} checked  {% endif %}"></i>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-1"> 
+                                    {% block form_field %}
+                                        <input type="button" class="submit_form btn btn-primary" value="Place Order">
+                                    {% endblock form_field %}           
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endblock product_loop %}
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+
+    {% block form %}
+        <form id="form" action={% url "accounts:show_games_for_current_seller"  %} method="post">
+            {% csrf_token %}
+            <input  type="hidden" name="seller" value="{{seller}}"></input>
+        </form>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $(".submit_form").click(function() {
+                    var name = $(this.parentNode.parentNode).find("h5").text();
+                    $("#form").find("input").eq(1).val(name.trim());
+                    $("#form").submit()
+                });
+            });
+        </script>
+    {% endblock form %}
+
+{% endblock content %}
+
+ 
+
 <div class="row text-center text-white mb-5">
     <div class="col-lg-7 mx-auto">
       <p class="lead">Snippet by <a href="https://bootstrapious.com/snippets" class="text-white"> 
@@ -139,4 +139,4 @@
       </p>
     </div>
   </div>
-{% endblock content %}
+
