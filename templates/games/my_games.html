@@ -7,7 +7,6 @@
 
 {% block list_type %}
     <br>
-
   My Games
 {% endblock list_type %}
 
@@ -24,7 +23,7 @@
             <div class="media align-items-lg-center flex-column flex-lg-row p-3">
                 <div class="media-body order-2 order-lg-1">
                     <h5 class="mt-0 font-weight-bold mb-2">
-                        {{seller_game}}
+                        {{seller_game.game}}
                     </h5>
                     <p class="font-italic text-muted mb-0 small">
                         {{seller_game.game.description}}

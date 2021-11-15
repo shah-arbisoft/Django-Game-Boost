@@ -78,10 +78,10 @@ class ProfileUpdateForm(forms.Form):
         in database, else ValidationError is raised for unmatched current password.
 
         Args:
-            user (USER):
+            user (User):
                 Current logged-in user who wants to update his password
         Returns:
-            USER:
+            User:
                 Same user is returned with updated password
         """
         cleaned_data = super().clean()
@@ -133,6 +133,5 @@ class SignupForm(UserCreationForm):
     )
 
     class Meta:
-        """Defing Form behaviour"""
         model = User
         fields = ('email', 'user_name', 'password1', 'password2')

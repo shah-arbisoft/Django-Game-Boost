@@ -3,16 +3,17 @@ This module contains all models defining our user when behaving
 as a seller, buyer etc.
 """
 
+import orders
 # pylint: disable=no-member, too-few-public-methods
-from django.contrib.auth.models import (
-    AbstractBaseUser, BaseUserManager, PermissionsMixin
-)
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.db import models
 from django.db.models import Min
+from django.db.models.aggregates import Count
 from django.db.models.fields.related import OneToOneField
-from .helpers import get_age_from_date_of_birth
 
-FIVE_STAR = 5
+from .constants import FIVE_STAR
+from .helpers import get_age_from_date_of_birth
 
 
 class AccountManager(BaseUserManager):
@@ -146,7 +147,6 @@ class UserCommonInfo(models.Model):
         return f"{self.id}"
 
     class Meta:
-        """Making it abstract class"""
         abstract = True
 
 
@@ -163,6 +163,10 @@ class Seller(UserCommonInfo):
     user = OneToOneField(User, related_name="seller", on_delete=models.CASCADE)
     rating = models.FloatField("Rating", default=FIVE_STAR)
     clicks = models.PositiveBigIntegerField("profile visits", default=0)
+    providing_services_to_number_of_games = models.PositiveIntegerField(
+        "Number of Games", default=0, blank=True
+    )
+
     time_limit_in_hours_for_changing_requirements = \
         models.PositiveBigIntegerField(default=8)
 
@@ -172,8 +176,14 @@ class Seller(UserCommonInfo):
     )
 
     class Meta:
-        """Changing default Model behaviour"""
-        ordering = ["-rating"]
+        ordering = ["-rating", "-providing_services_to_number_of_games"]
+
+    def save(self, *args, **kwargs):
+        """
+        Saving and updating the field 'providing_services_to_number_of_games'.
+        """
+        self.providing_services_to_number_of_games = self.seller_games.count()
+        super().save(*args, **kwargs)
 
     @property
     def starting_price(self):
@@ -188,6 +198,42 @@ class Seller(UserCommonInfo):
             min_price=Min("seller_games__seller_price")
         )
         return prices.get("min_price")
+
+    @property
+    def total_number_of_orders(self):
+        """
+        Calculate total of number of orders this seller has completed
+        or cuurently ongoing.
+
+        Returns:
+            (int): Total number of orders of this seller.
+        """
+        all_sellers_total_orders = Seller.objects.annotate(
+            total_orders=Count('orders')
+        )
+        return all_sellers_total_orders.get(user=self.user).total_orders
+
+    @property
+    def recent_buyers(self):
+        """
+        Returns 3 recent buyers of this seller.
+
+        Returns:
+            (int): Last 3 unique buyers who initiated order with this seller.
+        """
+        orders_of_seller = (
+            self.orders
+            .values_list('id', flat=True)
+            .order_by('buyer', 'order_start_time')
+            .distinct('buyer')[:3]
+        )
+        recent_buyers = (
+            orders.models.Order.objects
+            .filter(id__in=orders_of_seller)
+            .order_by('-order_start_time')
+            .values_list('buyer__user__user_name', flat=True)
+        )
+        return recent_buyers
 
 
 class Buyer(UserCommonInfo):

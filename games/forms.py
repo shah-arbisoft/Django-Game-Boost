@@ -7,7 +7,7 @@ from django.forms.widgets import HiddenInput
 from .models import SellerGame
 
 
-class AddGame(forms.ModelForm):
+class AddGameForm(forms.ModelForm):
     """A Form for Seller to add a Game to his list of games he offer service."""
     class Meta:
         """Changing default Model behaviour"""

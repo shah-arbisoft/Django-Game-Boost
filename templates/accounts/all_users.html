@@ -73,7 +73,8 @@
                             <li class="list-group-item">
                                 <div class="media align-items-lg-center flex-column flex-lg-row p-3">
                                     <div class="media-body order-2 order-lg-1">
-                                        <a href = {% url "accounts:display_profile" seller %}>
+                                            <a href = {% url "accounts:display_profile" seller.id %}>
+
                                             <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
                                                 {{seller.user.user_name|title}}
                                             </h5>
@@ -99,9 +100,10 @@
                                     <img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-1"> 
-                                    {% block form_field %}
-                                        <input type="button" class="submit_form btn btn-primary" value="Place Order">
-                                    {% endblock form_field %}           
+                                    <a href = {% url "accounts:show_games_for_current_seller" seller.id %}>
+                                        <input type="submit" class="submit_form btn btn-primary" value="Place Order">
+                                    </a>
+                                   
                                 </div>
                             </li>
                         {% endfor %}
@@ -110,23 +112,6 @@
             </div>
         </div>
     </div>
-
-    {% block form %}
-        <form id="form" action={% url "accounts:show_games_for_current_seller"  %} method="post">
-            {% csrf_token %}
-            <input  type="hidden" name="seller" value="{{seller}}"></input>
-        </form>
-
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $(".submit_form").click(function() {
-                    var name = $(this.parentNode.parentNode).find("h5").text();
-                    $("#form").find("input").eq(1).val(name.trim());
-                    $("#form").submit()
-                });
-            });
-        </script>
-    {% endblock form %}
 
 {% endblock content %}
 

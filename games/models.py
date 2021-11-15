@@ -34,7 +34,6 @@ class Game(models.Model):
     clicks = models.PositiveIntegerField("Number of clicks recieved", default=0)
 
     class Meta:
-        """Changing default Model behaviour"""
         ordering = ["-rating"]
 
     def __str__(self):

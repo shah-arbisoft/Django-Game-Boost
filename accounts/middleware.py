@@ -20,9 +20,9 @@ class ProfileClicksMiddleWare:
         "display_profile" is called, Seller clicks are incremented by 1.
         """
         if view_func.__name__ == "display_profile":
-            username = view_kwargs.get("name")
+            seller_id = view_kwargs.get("seller_pk")
             try:
-                seller = Seller.objects.get(user__user_name=username)
+                seller = Seller.objects.get(id=seller_id)
                 seller.clicks += 1
                 seller.save()
             except Seller.DoesNotExist:

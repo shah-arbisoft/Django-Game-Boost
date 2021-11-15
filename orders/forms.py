@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from .models import Order
 
 
-class PlaceOrder(ModelForm):
+class PlaceOrderForm(ModelForm):
     """Defining Model Form for our model Order"""
 
     class Meta:

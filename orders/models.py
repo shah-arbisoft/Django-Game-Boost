@@ -7,7 +7,8 @@ contain and what it can do with it.
 
 import datetime
 
-from accounts.models import FIVE_STAR, Buyer, Seller
+from accounts.constants import FIVE_STAR
+from accounts.models import Buyer, Seller
 from django.db import models
 from django.db.models.aggregates import Avg
 from django.db.models.fields.related import ForeignKey
@@ -147,7 +148,7 @@ class Review(models.Model):
     def save(self, *args, **kwargs):
         """
         After saving review for current order, All review ratings of orders
-        for game and seller of this order
+        for game and seller of this order are updated
         """
         super().save(*args, **kwargs)
         self._update_rating_of_game_of_this_order()

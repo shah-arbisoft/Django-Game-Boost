@@ -14,13 +14,18 @@ urlpatterns = [
         name='all_games'
     ),
     path(
+        '<int:game_pk>/sellers',
+        views.show_sellers_for_current_game,
+        name='show_sellers_for_current_game'
+    ),
+    path(
         'seller_games/',
-        views.all_games_for_which_seller_offer_service,
+        views.show_all_games_for_which_seller_offer_service,
         name='my_games'
     ),
     path(
         'add_game/',
-        views.add_game_to_seller,
+        views.display_form_to_add_game_to_seller,
         name='add_game'
     ),
 ]
