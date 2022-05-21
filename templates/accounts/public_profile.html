@@ -1,6 +1,13 @@
-User : {{user}}
+User : {{seller.user.user_name}}
 <br>
-Clicks : {{user.seller.clicks}}
+Clicks : {{seller.clicks}}
 <br>
+Total Orders: {{seller.total_number_of_orders}}
 
-Total Orders: {{total_orders}}
+<br>
+Recent Buyers :
+<br>
+{% for buyer in seller.recent_buyers %}
+    &nbsp;&nbsp;&nbsp;{{buyer}}
+    <br>
+{% endfor %}

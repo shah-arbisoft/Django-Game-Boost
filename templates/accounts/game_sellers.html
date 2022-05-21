@@ -8,7 +8,7 @@
 
 {% block list_type %}
     <strong style="color:black">
-        {{game_sellers.first}}
+        {{game_sellers.first.game.name}}
     </strong> 
     Sellers
 {% endblock list_type %}
@@ -19,14 +19,14 @@
         <li class="list-group-item">
         <div class="media align-items-lg-center flex-column flex-lg-row p-3">
             <div class="media-body order-2 order-lg-1">
-            <a href = {% url "accounts:display_profile" seller %}>
-            <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
-                {{seller|title}}
-            </h5>
-            </a>
-            <p class="font-italic text-muted mb-0 small">
-                {{seller_game.seller_description_of_game}}
-            </p>
+                <a href = {% url "accounts:display_profile" seller %}>
+                    <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
+                        {{seller.user.user_name|title}}
+                    </h5>
+                </a>
+                <p class="font-italic text-muted mb-0 small">
+                    {{seller_game.seller_description_of_game}}
+                </p>
             <div class="d-flex align-items-center justify-content-between mt-1">
                 <h6 class="font-weight-bold my-2">
                     Price : ${{seller_game.seller_price}}
@@ -40,23 +40,19 @@
                     {% endfor %}
                 </ul>
             </div>
-            </div><img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
-        </div>
-        <!-- End -->
-        <div class="d-flex align-items-center justify-content-between mt-1">
-    
-            <form action={% url "orders:creating_order" %} method="post">
-                {% csrf_token %}
-                <input  type="hidden" name="seller" value="{{seller}}"></input>
-                <input type="submit" class="btn btn-primary" value="Place Order">
-            </form>
-        
-        </div>
+            </div>
+                <img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+            </div>
+            <div class="d-flex align-items-center justify-content-between mt-1">
+                <a href = {% url "orders:creating_order" seller_game %}>
+                    <input type="button" class="submit_form btn btn-primary" value="Place Order">
+                </a>
+            </div>
         </li>
-        <!-- End -->
     {% endfor %}
+
 {% endblock product_loop %}
 
-      
+
 
 

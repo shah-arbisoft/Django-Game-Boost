@@ -52,12 +52,9 @@
                     <form class="form" enctype="multipart/form-data" novalidate="" method="post" action={% url "accounts:update_profile" %}>
                       {% csrf_token %}
                     <div class="mt-2 btn btn-primary">
-                    
-                      {% comment %} <button class="btn btn-primary" type="button"> {% endcomment %}
                         <i class="fa fa-fw fa-camera"></i>
                         <span>Change Photo</span>
                         <input type="file" name="{{form.profile_image.name}}" style="box-sizing: border-box; position: absolute; bottom: 5px; left: 15px; width: 150px; height: 38px; opacity: 0;"></input>
-                      {% comment %} </button> {% endcomment %}
                     </div>
                   </div>
                   <div class="text-center text-sm-right">

@@ -1,12 +1,16 @@
-from django.forms import ModelForm, fields
+"""Forms to be defined for 'model' Order in this module."""
 
+from django.forms import ModelForm
+
+# pylint: disable=relative-beyond-top-level, too-few-public-methods
 from .models import Order
 
 
-class PlacingOrder(ModelForm):
+class PlaceOrderForm(ModelForm):
+    """Defining Model Form for our model Order"""
+
     class Meta:
+        """Defing Form behaviour"""
         model = Order
-        fields = [
-            "gaming_account_id", "gaming_account_password", "price",
-            "description", "number_of_days_for_completing_the_order", "game"
-        ]
+        fields = '__all__'
+        exclude = ['status']

@@ -1,0 +1,60 @@
+{% extends 'all_users.html' %}
+{% load static %}
+{% load custom_tags %}
+
+
+
+{% block title %}
+    ORDERS
+{% endblock title %}
+
+{% block list_type %}
+  My Orders
+{% endblock list_type %}
+
+{% block product_loop %}
+  {% for order in orders%}
+    <li class="list-group-item">
+      <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+          <div class="media-body order-2 order-lg-1">
+            <h5 class="mt-0 font-weight-bold mb-2">
+                {{order.game}}
+            </h5>
+            <p class="font-italic text-muted mb-0 small">
+              {% block description %}
+                {{order.description}}
+              {% endblock description %}  
+            </p>
+
+            <div class="d-flex align-items-center justify-content-between mt-1">
+              
+              {% block price %}
+                Price : {{order.price}}
+              {% endblock price %}
+
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mt-1">
+                {% for category in order.game.categories.all %}
+                  <h6 class="font-weight-bold my-2">
+                    {{category.name}}
+                  </h6>
+                {% endfor %}
+
+              <ul class="list-inline small">
+                  Rating : 
+                  {% for i in '12345'|make_list %}
+                      <li class="list-inline-item m-0"> <i class="fa fa-star {% if order.seller.rating >= forloop.counter %} checked  {% endif %}"></i></li>
+                  {% endfor %}
+              </ul>  
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mt-1">
+                <button class="btn btn-primary">Complete</button>
+            </div>
+          </div>
+          <img src={{order.game.image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2"> 
+        </div>
+    </li>
+  {% endfor %}
+{% endblock product_loop %}

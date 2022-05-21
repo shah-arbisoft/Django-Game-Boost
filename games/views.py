@@ -1,16 +1,16 @@
-"""Contains all the view fucntions."""
+"""Contains all the view fucntions for model Game."""
 
-# pylint: disable=relative-beyond-top-level
+# pylint: disable=relative-beyond-top-level, no-member
+from accounts.models import Seller
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
-from django.http.response import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic.edit import FormView
 
-from .forms import AddGame
-from .models import Game
+from games.signals import game_clicked_signal
+
+from .forms import AddGameForm
+from .models import Game, SellerGame
 
 
 @login_required(login_url='accounts:login')
@@ -21,34 +21,55 @@ def show_all_games(request):
     """
     if request.user.is_superuser:
         return redirect('admin:login')
-    context = {"games": Game.objects.all()}
+    context = {"games": Game.objects.prefetch_related("categories")}
     return render(request, 'all_games.html', context)
 
 
-def all_games_for_which_seller_offer_service(request):
+def show_sellers_for_current_game(request, game_pk):
     """
-    If current authenticated User is acting as a Seller wants to display
-    all the games for which he is offering services, this function will do it.
+    After a buyer selects a game, A signal will be sent for the game he choosed
+    and He will be shown a list of all those sellers who offers service for
+    this game.
     """
     if request.user.is_superuser:
         return redirect('admin:login')
-    seller_games = request.user.seller.seller_games
+    game = get_object_or_404(Game, id=game_pk)
+    game_clicked_signal.send(sender=None, game_object=game)
+    game_sellers = (
+        SellerGame.objects
+        .filter(game=game)
+        .select_related("seller")
+    )
+    context = {"game_sellers": game_sellers}
+    return render(request, 'game_sellers.html', context)
+
+
+def show_all_games_for_which_seller_offer_service(request):
+    """
+    If current authenticated User is acting as a Seller and wants to display
+    all the games for which he is offering services, those will be displayed.
+    """
+    if request.user.is_superuser:
+        return redirect('admin:login')
+    seller, _ = Seller.objects.get_or_create(user=request.user)
+    seller_games = seller.seller_games
     if seller_games:
-        seller_games = seller_games.all()    
-    context = {"games": seller_games, "seller":True}
+        seller_games = seller_games.all()
+    context = {"games": seller_games}
     return render(request, 'my_games.html', context)
 
 
-def add_game_to_seller(request):
+def display_form_to_add_game_to_seller(request):
     """
     If a seller wants to add a game to list of games for which he offers
     services, He will fill and submit this form will all the details and
     that game will be added.
     """
     if request.method == 'POST':
-        form = AddGame(request.POST)
+        form = AddGameForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Game added successfully')
             return redirect(reverse("games:my_games"))
-    form = AddGame(initial={'seller': request.user.seller})
+    form = AddGameForm(initial={'seller': request.user.seller})
     return render(request, 'seller_add_game.html', {'form': form})
