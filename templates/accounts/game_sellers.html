@@ -1,0 +1,62 @@
+{% extends 'all_users.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}
+    Game Sellers
+{% endblock title %}
+
+{% block list_type %}
+    <strong style="color:black">
+        {{game_sellers.first}}
+    </strong> 
+    Sellers
+{% endblock list_type %}
+
+{% block product_loop %}
+    {% for seller_game in game_sellers%}
+        {% alias seller_game.seller as seller %} 
+        <li class="list-group-item">
+        <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+            <div class="media-body order-2 order-lg-1">
+            <a href = {% url "accounts:display_profile" seller %}>
+            <h5 style="color:black" class="mt-0 font-weight-bold mb-2">
+                {{seller|title}}
+            </h5>
+            </a>
+            <p class="font-italic text-muted mb-0 small">
+                {{seller_game.seller_description_of_game}}
+            </p>
+            <div class="d-flex align-items-center justify-content-between mt-1">
+                <h6 class="font-weight-bold my-2">
+                    Price : ${{seller_game.seller_price}}
+                </h6>
+                
+                
+                <ul class="list-inline small">
+                    Rating : 
+                    {% for i in '12345'|make_list %}
+                        <li class="list-inline-item m-0"> <i class="fa fa-star {% if seller.rating >= forloop.counter %} checked  {% endif %}"></i></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            </div><img src={{seller.user.profile_image.url}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+        </div>
+        <!-- End -->
+        <div class="d-flex align-items-center justify-content-between mt-1">
+    
+            <form action={% url "orders:creating_order" %} method="post">
+                {% csrf_token %}
+                <input  type="hidden" name="seller" value="{{seller}}"></input>
+                <input type="submit" class="btn btn-primary" value="Place Order">
+            </form>
+        
+        </div>
+        </li>
+        <!-- End -->
+    {% endfor %}
+{% endblock product_loop %}
+
+      
+
+

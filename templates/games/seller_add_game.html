@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
-{% block content %}
 
+
+{% if seller %}
+    {% block Buyer %}{% endblock Buyer %}
+{% endif %}
+
+{% block content %}
 <form style="text-align:center" action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}

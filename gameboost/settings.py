@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "accounts.middleware.DemoMiddleWare",
 ]
 
 ROOT_URLCONF = 'gameboost.urls'
@@ -60,7 +61,9 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates/accounts',
-            BASE_DIR / 'templates/orders'
+            BASE_DIR / 'templates/orders',
+            BASE_DIR / 'templates/games',
+
 
             ],
         'APP_DIRS': True,
@@ -123,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 

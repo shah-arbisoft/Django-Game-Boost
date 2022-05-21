@@ -1,10 +1,17 @@
+# from games.models import Game, SellerGame
 from django.contrib.auth.models import (
-    AbstractBaseUser, PermissionsMixin, BaseUserManager
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin
 )
-from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.db import models
+from django.db.models import Min
+from django.db.models.fields.related import (
+    ForeignKey,
+    ManyToManyField,                                         
+    OneToOneField
+)
 from django.utils import timezone
-
 
 FIVE_STAR = 5
 
@@ -45,17 +52,28 @@ class AccountManager(BaseUserManager):
 
 
 def default_profile_image():
+    """Default profile image to be used for every user if he have not set any."""
     return 'avatar.png'
 
+
 def get_profile_image_filepath(self, filename):
+    """
+    When User set his profile image, the uploaded imaged will be saved in
+    a folder named as User primary key and withing will be the uploaded image.
+    """
     return f'{self.pk}/{filename}'
 
+
 def get_age_from_date_of_birth(date_of_birth):
-    # print(date_of_birth)
-    # print(timezone.now())
+    """
+    When User sets his date of birth, his age will be automatically calculated
+    and returned.
+
+    Returns:
+        (int): Total age of User as of today
+    """
     age_as_of_today =  timezone.now() - date_of_birth
     age_in_years = (age_as_of_today.days/30)/12
-    # print(age_in_years)
     return age_in_years
 
 
@@ -100,24 +118,45 @@ class Seller(models.Model):
         GOLD = 2, 'Gold'
         MASTER = 3, 'Master'
 
-    reviews = models.FloatField("Review", default=5)
+    rating = models.FloatField("Rating", default=FIVE_STAR)
     total_number_of_completed_orders = 0
-    user = OneToOneField(User,related_name='seller' , on_delete=models.CASCADE)
+    user = OneToOneField(User, related_name='seller', on_delete=models.CASCADE)
+    clicks = models.PositiveBigIntegerField("profile visits", default=0)
     rank_badge = models.IntegerField(
         choices=BadgeRanks.choices,
         default=BadgeRanks.BRONZE,
     )
 
+    class Meta:
+        ordering = ['-rating']
+
     def __str__(self):
         return self.user.user_name
 
+    @property
+    def starting_price(self):
+        """
+        It will calculate price of every game the Seller is offering service for,
+        and return the minimum price among all his games
+
+        Returns:
+            (int): Price of his cheapest game he is offering.
+        """
+        prices = Seller.objects.filter(user=self.user).aggregate(min_price=Min('seller_games__seller_price'))
+        return prices.get("min_price")
+
 
 class Buyer(models.Model):
-    
-    # order_history = ForeignKey(Order, related_name="orders")
-    reviews = models.FloatField("Review", default=FIVE_STAR)
-    user = OneToOneField(User, related_name='buyer', on_delete=models.CASCADE)
+    user = OneToOneField(User, related_name='buyer', on_delete=models.CASCADE)    
     total_number_of_completed_orders = 0
 
     def __str__(self):
         return self.user.user_name
+
+
+class Review(models.Model):
+    seller = models.ForeignKey(Seller, related_name="reviews", on_delete=models.CASCADE)
+    rating = models.FloatField("Rating", default=FIVE_STAR)
+    comment = models.TextField("Review Comment", max_length=500, blank=True, null=True)
+
+    
